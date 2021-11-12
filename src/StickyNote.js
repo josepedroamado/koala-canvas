@@ -16,6 +16,10 @@ export default class StickyNote extends React.Component {
         
     }
 
+    remove = () => {
+        this.props.onRemove();
+    }
+
     render() { 
         return <>
         <Draggable>
@@ -24,7 +28,7 @@ export default class StickyNote extends React.Component {
                 style={{ width: '16rem', height: '14rem'}}
                 className="mb-2 shadow">
                 <Card.Body>
-                    <CloseButton className="float-right"/>
+                    <CloseButton className="float-right" onClick={this.remove}/>
                     <Card.Text>
                         {this.state.content}
                     </Card.Text>               

@@ -36,6 +36,22 @@ export default class App extends React.Component {
         this.setState(notes);
     }
 
+    removeStickyNote(id){
+        var notes = this.state.stickies;
+        var indexToDelete;
+        for (let i = 0; i < notes.length; i++) {
+            if (notes[i].id === id) {
+                indexToDelete = i;
+            }
+        }
+        notes.splice(indexToDelete, 1);
+        this.setState(notes);
+    }
+
+    updateStickyNote(){
+
+    }
+
     clearCanvas(){
         var notes = this.state.stickies;
         notes.stickies = [];
@@ -55,7 +71,14 @@ export default class App extends React.Component {
                 </Nav>
             </Container>
         </Navbar>
-        {this.state.stickies.map((sticky) => <StickyNote content={sticky.content} key={sticky.id}/>)}
+        {this.state.stickies.map(
+            (sticky) => <StickyNote 
+                            content={sticky.content} 
+                            key={sticky.id} 
+                            onChange={() => this.updateStickyNote}
+                            onRemove={() => this.removeStickyNote(sticky.id)} />
+                            )
+        }
         </>
     }
 }
