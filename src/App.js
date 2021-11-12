@@ -4,38 +4,52 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-function App() {
-  const stickies = [{content: 'Note 1', id: 1}, {content: 'Note 2', id: 2}];
-
-  const [stickyNotes, setStickyNotes] = useState(stickies);
-
-  function addStickyNote(){
-    var currentId = 1;
-    if (stickyNotes.lastItem != undefined){
-      currentId = stickyNotes.lastItem.id;
+export default class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      stickies: [{content: 'Note 1', id: 0}, {content: 'Note 2', id: 1}]
     }
+  }
+
+  componentDidMount() {
+    
+  }
+
+  getCurrentId(){
+    var currentId = 0;
+    if (this.state.stickies.length > 0){
+      currentId = this.state.stickies.at(-1).id;
+    }
+    return currentId;
+  }
+
+  addStickyNote(){
     var newNote = {
       content: 'New Note',
-      id: currentId+1
-    };
-    console.log(newNote);
+      id: this.getCurrentId()+1
+    }
+    var notes = this.state.stickies;
+    notes.push(newNote);
+    this.setState(notes);
   }
-  return <>
+
+  render() {
+    return <>
     <Navbar bg="success" variant="dark" className='shadow-sm'>
       <Container>
           <Navbar.Brand> 
               Koala Canvas
           </Navbar.Brand>         
           <Nav className="justify-content-end">
-            <Button onClick={() => addStickyNote()}>Add a Note</Button>
+            <Button onClick={() => this.addStickyNote()}>Add a Note</Button>
             <Nav.Link href="#">Clear Canvas</Nav.Link>
           </Nav>
       </Container>
     </Navbar>
-    {stickyNotes.map((sticky) => <StickyNote content={sticky.content} key={sticky.id}/>)}
+    {this.state.stickies.map((sticky) => <StickyNote content={sticky.content} key={sticky.id}/>)}
     </>
+  }
 }
-
-export default App;
