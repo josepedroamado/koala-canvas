@@ -1,20 +1,19 @@
 import Draggable from 'react-draggable';
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card';
+import CloseButton from 'react-bootstrap/CloseButton';
 
-function StickyNote({content}) {
+function StickyNote(props) {
   return <>
     <Draggable>
         <Card 
             bg='warning'
-            style={{ width: '18rem' }}
-            className="mb-2">
-            <Card.Header>Note Title</Card.Header>
+            style={{ width: '16rem', height: '14rem'}}
+            className="mb-2 shadow">
             <Card.Body>
+                <CloseButton className="float-right"/>
                 <Card.Text>
-                {content}
-                </Card.Text>
-                <Button variant="outline-dark">Edit</Button>
+                    {props.content}
+                </Card.Text>               
             </Card.Body>
         </Card>
     </Draggable>
