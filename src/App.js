@@ -66,8 +66,8 @@ export default class App extends React.Component {
                     Koala Canvas
                 </Navbar.Brand>         
                 <Nav className="justify-content-end">
-                    <Button onClick={() => this.addStickyNote()}>Add a Note</Button>
-                    <Button onClick={() => this.clearCanvas()}>Clear Canvas</Button>
+                    <Button variant="outline-light" className='me-2' onClick={() => this.addStickyNote()}>Add a Note</Button>
+                    <Button variant="outline-light" onClick={() => this.clearCanvas()}>Clear Canvas</Button>
                 </Nav>
             </Container>
         </Navbar>
