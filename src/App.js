@@ -36,6 +36,12 @@ export default class App extends React.Component {
         this.setState(notes);
     }
 
+    clearCanvas(){
+        var notes = this.state.stickies;
+        notes.stickies = [];
+        this.setState(notes);
+    }
+
     render() {
         return <>
         <Navbar bg="success" variant="dark" className='shadow-sm'>
@@ -45,7 +51,7 @@ export default class App extends React.Component {
                 </Navbar.Brand>         
                 <Nav className="justify-content-end">
                     <Button onClick={() => this.addStickyNote()}>Add a Note</Button>
-                    <Nav.Link href="#">Clear Canvas</Nav.Link>
+                    <Button onClick={() => this.clearCanvas()}>Clear Canvas</Button>
                 </Nav>
             </Container>
         </Navbar>
