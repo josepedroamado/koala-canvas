@@ -11,8 +11,8 @@ export default class App extends React.Component {
         super(props);
         this.state = {
             stickies: [
-                {content: 'Note 1', id: 0, editing: false}, 
-                {content: 'Note 2', id: 1, editing: true}
+                {content: 'Note 1', id: 0, editing: false, position: {x: 10, y: 10}}, 
+                {content: 'Note 2', id: 1, editing: true, position: {x: 10, y: 10}}
             ]
         }
     }
@@ -25,12 +25,17 @@ export default class App extends React.Component {
         return currentId;
     }
 
+    randomInteger = (min, max) => {
+        return Math.floor(Math.random() * (max - min + 1)) + min
+    }
+
     addStickyNote(){
         let notes = [ ...this.state.stickies ];
         let newNote = {
             content: 'New Note',
             id: this.getCurrentId()+1,
-            editing: true
+            editing: true,
+            position: {x: this.randomInteger(10, 30), y: this.randomInteger(10, 30)}
         }
         notes.push(newNote);
         this.setState({stickies: notes});
@@ -56,6 +61,13 @@ export default class App extends React.Component {
         this.setState({stickies: notes});
     }
 
+    updateStickyNoteLocation = (id, x, y) => {
+        let notes = [ ...this.state.stickies ];
+        let noteToUpdate = notes.find((note) => note.id === id)
+        noteToUpdate.position = {x: x, y: y}
+        this.setState({stickies: notes})
+    }
+
     clearCanvas(){
         this.setState({stickies: []});
     }
@@ -79,9 +91,11 @@ export default class App extends React.Component {
                             content={sticky.content}
                             editing={sticky.editing}
                             key={sticky.id} 
+                            position={sticky.position}
                             onChange={this.updateStickyNote}
                             onRemove={() => this.removeStickyNote(sticky.id)}
-                            onEdit={this.setNoteToEdit}/>
+                            onEdit={this.setNoteToEdit}
+                            onStop={this.updateStickyNoteLocation}/>
                             )
         }
         </>

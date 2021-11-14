@@ -7,7 +7,6 @@ import Button from 'react-bootstrap/Button';
 import Stack from 'react-bootstrap/Stack'
 
 export default class StickyNote extends React.Component {
-
     remove = () => {
         this.props.onRemove(this.props.id);
     }
@@ -23,10 +22,15 @@ export default class StickyNote extends React.Component {
 
     renderEditing() { 
         return <>
-        <Draggable>
+        <Draggable  position={{x: this.props.position.x, y: this.props.position.y}}
+                    onStop={(e, data) => {this.savePosition(data.x, data.y)}}>
             <Card 
                 bg='warning'
-                style={{ width: '16rem', height: '16rem'}}
+                style={{
+                    width: '16rem', 
+                    height: '14rem',
+                    position: 'absolute'
+                }}
                 className="mb-2 shadow">
                 <Card.Header>
                     <Stack direction="horizontal" gap={3}>
@@ -47,12 +51,21 @@ export default class StickyNote extends React.Component {
         </>
     }
 
+    savePosition = (x, y) => {
+        this.props.onStop(this.props.id, x, y)
+    }
+
     renderDisplaying() { 
         return <>
-        <Draggable>
+        <Draggable  position={{x: this.props.position.x, y: this.props.position.y}}
+                    onStop={(e, data) => {this.savePosition(data.x, data.y)}}>
             <Card 
                 bg='warning'
-                style={{ width: '16rem', height: '14rem'}}
+                style={{
+                    width: '16rem', 
+                    height: '14rem',
+                    position: 'absolute'
+                }}
                 className="mb-2 shadow">    
                 <Card.Header>
                     <Stack direction="horizontal" gap={3}>
