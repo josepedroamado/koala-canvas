@@ -12,7 +12,7 @@ export default class StickyNote extends React.Component {
     }
 
     update = (event) => {
-        this.props.onChange(this.props.id, event.target.noteText.value);
+        this.props.onChange(this.props.id, event.target.noteText.value, event.target.noteColor.value);
         event.preventDefault();
     }
 
@@ -25,11 +25,11 @@ export default class StickyNote extends React.Component {
         <Draggable  position={{x: this.props.position.x, y: this.props.position.y}}
                     onStop={(e, data) => {this.savePosition(data.x, data.y)}}>
             <Card 
-                bg='warning'
                 style={{
                     width: '16rem', 
                     height: '14rem',
-                    position: 'absolute'
+                    position: 'absolute',
+                    backgroundColor: this.props.color    
                 }}
                 className="mb-2 shadow">
                 <Card.Header>
@@ -41,9 +41,17 @@ export default class StickyNote extends React.Component {
                         <Form onSubmit={this.update}>
                             <Form.Control as="textarea" rows={3} name="noteText" defaultValue={this.props.content} />
                             <br/>
-                            <Button variant="outline-dark" type="submit">
-                                Save
-                            </Button>
+                            <Stack direction="horizontal" gap={3}>
+                                <Form.Control
+                                    type="color"
+                                    name="noteColor"
+                                    defaultValue="#563d7c"
+                                    className='me-auto'
+                                />
+                                <Button variant="outline-dark" type="submit" className='ms-auto'>
+                                    Save
+                                </Button>
+                            </Stack>                          
                         </Form>
                 </Card.Body>
             </Card>
@@ -60,11 +68,11 @@ export default class StickyNote extends React.Component {
         <Draggable  position={{x: this.props.position.x, y: this.props.position.y}}
                     onStop={(e, data) => {this.savePosition(data.x, data.y)}}>
             <Card 
-                bg='warning'
                 style={{
                     width: '16rem', 
                     height: '14rem',
-                    position: 'absolute'
+                    position: 'absolute',
+                    backgroundColor: this.props.color    
                 }}
                 className="mb-2 shadow">    
                 <Card.Header>

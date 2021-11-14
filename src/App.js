@@ -11,8 +11,8 @@ export default class App extends React.Component {
         super(props);
         this.state = {
             stickies: [
-                {content: 'Note 1', id: 0, editing: false, position: {x: 10, y: 10}}, 
-                {content: 'Note 2', id: 1, editing: true, position: {x: 10, y: 10}}
+                {content: 'Note 1', id: 0, editing: false, position: {x: 10, y: 10}, color: '#ffc107'}, 
+                {content: 'Note 2', id: 1, editing: true, position: {x: 10, y: 10}, color: '#ffc107'}
             ]
         }
     }
@@ -35,7 +35,8 @@ export default class App extends React.Component {
             content: 'New Note',
             id: this.getCurrentId()+1,
             editing: true,
-            position: {x: this.randomInteger(10, 30), y: this.randomInteger(10, 30)}
+            position: {x: this.randomInteger(10, 30), y: this.randomInteger(10, 30)},
+            color: '#ffc107'
         }
         notes.push(newNote);
         this.setState({stickies: notes});
@@ -46,10 +47,11 @@ export default class App extends React.Component {
         this.setState({stickies: notes});
     }
 
-    updateStickyNote = (id, newContent) => {
+    updateStickyNote = (id, newContent, newColor) => {
         let notes = [ ...this.state.stickies ];
         let oldNote = notes.find((note) => note.id === id)
         oldNote.content = newContent
+        oldNote.color = newColor
         oldNote.editing = false
         this.setState({stickies: notes});
     }
@@ -92,6 +94,7 @@ export default class App extends React.Component {
                             editing={sticky.editing}
                             key={sticky.id} 
                             position={sticky.position}
+                            color={sticky.color}
                             onChange={this.updateStickyNote}
                             onRemove={() => this.removeStickyNote(sticky.id)}
                             onEdit={this.setNoteToEdit}
