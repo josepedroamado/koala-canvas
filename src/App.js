@@ -10,12 +10,11 @@ export default class App extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            stickies: [{content: 'Note 1', id: 0}, {content: 'Note 2', id: 1}]
+            stickies: [
+                {content: 'Note 1', id: 0, editing: false}, 
+                {content: 'Note 2', id: 1, editing: true}
+            ]
         }
-    }
-
-    componentDidMount() {
-        
     }
 
     getCurrentId(){
@@ -27,35 +26,38 @@ export default class App extends React.Component {
     }
 
     addStickyNote(){
-        var newNote = {
+        let notes = [ ...this.state.stickies ];
+        let newNote = {
             content: 'New Note',
-            id: this.getCurrentId()+1
+            id: this.getCurrentId()+1,
+            editing: true
         }
-        var notes = this.state.stickies;
         notes.push(newNote);
-        this.setState(notes);
+        this.setState({stickies: notes});
     }
 
     removeStickyNote(id){
-        var notes = this.state.stickies;
-        var indexToDelete;
-        for (let i = 0; i < notes.length; i++) {
-            if (notes[i].id === id) {
-                indexToDelete = i;
-            }
-        }
-        notes.splice(indexToDelete, 1);
-        this.setState(notes);
+        let notes = this.state.stickies.filter(note => note.id !== id)
+        this.setState({stickies: notes});
     }
 
-    updateStickyNote(){
+    updateStickyNote = (id, newContent) => {
+        let notes = [ ...this.state.stickies ];
+        let oldNote = notes.find((note) => note.id === id)
+        oldNote.content = newContent
+        oldNote.editing = false
+        this.setState({stickies: notes});
+    }
 
+    setNoteToEdit = (id) => {
+        let notes = [ ...this.state.stickies ];
+        let oldNote = notes.find((note) => note.id === id)
+        oldNote.editing = true
+        this.setState({stickies: notes});
     }
 
     clearCanvas(){
-        var notes = this.state.stickies;
-        notes.stickies = [];
-        this.setState(notes);
+        this.setState({stickies: []});
     }
 
     render() {
@@ -73,10 +75,13 @@ export default class App extends React.Component {
         </Navbar>
         {this.state.stickies.map(
             (sticky) => <StickyNote 
-                            content={sticky.content} 
+                            id ={sticky.id}
+                            content={sticky.content}
+                            editing={sticky.editing}
                             key={sticky.id} 
-                            onChange={() => this.updateStickyNote}
-                            onRemove={() => this.removeStickyNote(sticky.id)} />
+                            onChange={this.updateStickyNote}
+                            onRemove={() => this.removeStickyNote(sticky.id)}
+                            onEdit={this.setNoteToEdit}/>
                             )
         }
         </>
