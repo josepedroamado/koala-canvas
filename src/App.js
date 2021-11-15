@@ -5,18 +5,17 @@ import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import React from "react";
-import {ReactSketchCanvas} from 'react-sketch-canvas';
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
+import { ReactSketchCanvas } from 'react-sketch-canvas';
+import Modal from 'react-bootstrap/Modal'
+import Form from 'react-bootstrap/Form'
 
 export default class App extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = {
-            stickies: [
-                {content: 'Note 1', id: 0, editing: false, position: {x: 10, y: 10}, color: '#ffc107'}, 
-                {content: 'Note 2', id: 1, editing: true, position: {x: 10, y: 10}, color: '#ffc107'}
-            ]
+        this.state = { 
+            stickies: [], 
+            showAddPictureModal: false, 
+            pictures: [] 
         }
         this.canvas = React.createRef()
     }
@@ -82,6 +81,22 @@ export default class App extends React.Component {
         this.canvas.current.resetCanvas()
     }
 
+    setEraserMode(value){
+        this.canvas.current.eraseMode(value)
+    }
+
+    closeAddPictureModal = () => {
+        this.setState({showAddPictureModal: false})
+    }
+
+    showAddPictureModal = () => {
+        this.setState({showAddPictureModal: true})
+    }
+
+    addPicture = (event) => {
+        console.log(event.target.imageFile.value)
+    }
+
     render() {
         return <>
         <Navbar bg="success" variant="dark" className='shadow-sm'>
@@ -90,14 +105,37 @@ export default class App extends React.Component {
                     Koala Canvas
                 </Navbar.Brand>         
                 <Nav className="justify-content-end">
+                    <Button variant="outline-light" className='me-2' onClick={this.showAddPictureModal}>
+                        Add Picture
+                    </Button>
                     <Button variant="outline-light" className='me-2' onClick={() => this.addStickyNote()}>Add a Note</Button>
                     <Button variant="outline-light" className='me-2' onClick={() => this.clearStickyNotes()}>Clear Sticky Notes</Button>
+                    <Button variant="outline-light" className='me-2' onClick={() => this.setEraserMode(false)}>Pen Mode</Button>
+                    <Button variant="outline-light" className='me-2' onClick={() => this.setEraserMode(true)}>Erase Mode</Button>
                     <Button variant="outline-light" onClick={() => this.clearDrawings()}>Clear Canvas</Button>
                 </Nav>
             </Container>
         </Navbar>
         <Container fluid>
-                
+                    <Modal show={this.state.showAddPictureModal} onHide={this.closeAddPictureModal}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Browse for an image to upload</Modal.Title>
+                        </Modal.Header>
+                        <Form onSubmit={this.addPicture}>
+                            <Modal.Body>
+                                Please browse your device for an image to upload
+                                <Form.Control type="file" name='imageFile'/>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary" onClick={this.closeAddPictureModal}>
+                                    Close
+                                </Button>
+                                <Button variant="primary" type="submit" onClick={this.showAddPictureModal}>
+                                    Save Changes
+                                </Button>
+                            </Modal.Footer>
+                        </Form>
+                    </Modal>
                     {this.state.stickies.map(
                         (sticky) => <StickyNote 
                                         id ={sticky.id}
@@ -123,7 +161,7 @@ export default class App extends React.Component {
                             zIndex: -1
                         }}
                         strokeWidth={4}
-                        eraserWidth={8}
+                        eraserWidth={40}
                         strokeColor="blue"
                         />
                 
