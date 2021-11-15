@@ -5,6 +5,9 @@ import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import React from "react";
+import {ReactSketchCanvas} from 'react-sketch-canvas';
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 export default class App extends React.Component {
     constructor(props){
@@ -15,6 +18,7 @@ export default class App extends React.Component {
                 {content: 'Note 2', id: 1, editing: true, position: {x: 10, y: 10}, color: '#ffc107'}
             ]
         }
+        this.canvas = React.createRef()
     }
 
     getCurrentId(){
@@ -70,8 +74,12 @@ export default class App extends React.Component {
         this.setState({stickies: notes})
     }
 
-    clearCanvas(){
+    clearStickyNotes(){
         this.setState({stickies: []});
+    }
+
+    clearDrawings(){
+        this.canvas.current.resetCanvas()
     }
 
     render() {
@@ -83,24 +91,43 @@ export default class App extends React.Component {
                 </Navbar.Brand>         
                 <Nav className="justify-content-end">
                     <Button variant="outline-light" className='me-2' onClick={() => this.addStickyNote()}>Add a Note</Button>
-                    <Button variant="outline-light" onClick={() => this.clearCanvas()}>Clear Canvas</Button>
+                    <Button variant="outline-light" className='me-2' onClick={() => this.clearStickyNotes()}>Clear Sticky Notes</Button>
+                    <Button variant="outline-light" onClick={() => this.clearDrawings()}>Clear Canvas</Button>
                 </Nav>
             </Container>
         </Navbar>
-        {this.state.stickies.map(
-            (sticky) => <StickyNote 
-                            id ={sticky.id}
-                            content={sticky.content}
-                            editing={sticky.editing}
-                            key={sticky.id} 
-                            position={sticky.position}
-                            color={sticky.color}
-                            onChange={this.updateStickyNote}
-                            onRemove={() => this.removeStickyNote(sticky.id)}
-                            onEdit={this.setNoteToEdit}
-                            onStop={this.updateStickyNoteLocation}/>
-                            )
-        }
+        <Container fluid>
+                
+                    {this.state.stickies.map(
+                        (sticky) => <StickyNote 
+                                        id ={sticky.id}
+                                        content={sticky.content}
+                                        editing={sticky.editing}
+                                        key={sticky.id} 
+                                        position={sticky.position}
+                                        color={sticky.color}
+                                        onChange={this.updateStickyNote}
+                                        onRemove={() => this.removeStickyNote(sticky.id)}
+                                        onEdit={this.setNoteToEdit}
+                                        onStop={this.updateStickyNoteLocation}/>
+                                        )}
+                
+                    <ReactSketchCanvas
+                        ref={this.canvas}
+                        style={{
+                            height: '100%',
+                            width: '100%',
+                            position: 'absolute',
+                            left: '0px',
+                            overflow: 'hidden',
+                            zIndex: -1
+                        }}
+                        strokeWidth={4}
+                        eraserWidth={8}
+                        strokeColor="blue"
+                        />
+                
+        </Container>
         </>
     }
 }
