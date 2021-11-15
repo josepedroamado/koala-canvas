@@ -21,7 +21,7 @@ export default class App extends React.Component {
         this.canvas = React.createRef()
     }
 
-    getCurrentStickyNoteId(){
+    getLastStickyNoteId(){
         var currentId = 0;
         if (this.state.stickies.length > 0){
             currentId = this.state.stickies.at(-1).id;
@@ -29,7 +29,7 @@ export default class App extends React.Component {
         return currentId
     }
 
-    randomInteger = (min, max) => {
+    getRandomIntegerBetween = (min, max) => {
         return Math.floor(Math.random() * (max - min + 1)) + min
     }
 
@@ -37,9 +37,9 @@ export default class App extends React.Component {
         let notes = [ ...this.state.stickies ]
         let newNote = {
             content: 'New Note',
-            id: this.getCurrentStickyNoteId()+1,
+            id: this.getLastStickyNoteId()+1,
             editing: true,
-            position: {x: this.randomInteger(10, 30), y: this.randomInteger(10, 30)},
+            position: {x: this.getRandomIntegerBetween(10, 30), y: this.getRandomIntegerBetween(10, 30)},
             color: '#ffc107'
         }
         notes.push(newNote);
@@ -60,7 +60,7 @@ export default class App extends React.Component {
         this.setState({stickies: notes})
     }
 
-    setNoteToEdit = (id) => {
+    setStickyNoteToEditMode = (id) => {
         let notes = [ ...this.state.stickies ];
         let oldNote = notes.find((note) => note.id === id)
         oldNote.editing = true
@@ -82,6 +82,16 @@ export default class App extends React.Component {
         this.canvas.current.resetCanvas()
     }
 
+    clearPictures(){
+        this.setState({pictures: []})
+    }
+
+    clearAll(){
+        this.clearStickyNotes()
+        this.clearDrawings()
+        this.clearPictures()
+    }
+
     setEraserMode(value){
         this.canvas.current.eraseMode(value)
     }
@@ -98,9 +108,9 @@ export default class App extends React.Component {
         if (event.target.imageFile.files && event.target.imageFile.files[0]) {
             let images = [ ...this.state.pictures ]
             let newImage = {
-                id: this.getCurrentPictureId()+1, 
+                id: this.getLastPictureId()+1, 
                 picture: URL.createObjectURL(event.target.imageFile.files[0]),
-                position: {x: this.randomInteger(10, 30), y: this.randomInteger(10, 30)},
+                position: {x: this.getRandomIntegerBetween(10, 30), y: this.getRandomIntegerBetween(10, 30)},
             }
             images.push(newImage)
             this.setState({
@@ -111,7 +121,7 @@ export default class App extends React.Component {
         event.preventDefault()
     }
 
-    getCurrentPictureId(){
+    getLastPictureId(){
         var currentId = 0;
         if (this.state.pictures.length > 0){
             currentId = this.state.pictures.at(-1).id
@@ -126,10 +136,11 @@ export default class App extends React.Component {
         this.setState({pictures: images})
     }
     
-    removeImage(id){
+    removePicture(id){
         let images = this.state.pictures.filter(pic => pic.id !== id)
         this.setState({pictures: images})
     }
+
 
     render() {
         return <>
@@ -143,33 +154,29 @@ export default class App extends React.Component {
                             Add Picture
                         </Button>
                         <Button variant="outline-light" className='me-2' onClick={() => this.addStickyNote()}>Add a Note</Button>
-                        <Button variant="outline-light" className='me-2' onClick={() => this.clearStickyNotes()}>Clear Sticky Notes</Button>
                         <Button variant="outline-light" className='me-2' onClick={() => this.setEraserMode(false)}>Pen Mode</Button>
                         <Button variant="outline-light" className='me-2' onClick={() => this.setEraserMode(true)}>Erase Mode</Button>
-                        <Button variant="outline-light" onClick={() => this.clearDrawings()}>Clear Canvas</Button>
+                        <Button variant="outline-light" onClick={() => this.clearAll()}>Clear All</Button>
                     </Nav>
                 </Container>
             </Navbar>
             <Container fluid>
                     <Modal show={this.state.showAddPictureModal} onHide={this.closeAddPictureModal}>
                         <Modal.Header closeButton>
-                            <Modal.Title>Browse for an image to upload</Modal.Title>
+                            <Modal.Title>Adding Image to Canvas</Modal.Title>
                         </Modal.Header>
                         <Form onSubmit={this.addPicture}>
                             <Modal.Body>
-                                Please browse your device for an image to upload
+                                Please browse your device for an image to add to the canvas
                                 <Form.Control type="file" accept ="image/*" name='imageFile'/>
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button variant="secondary" onClick={this.closeAddPictureModal}>
-                                    Close
-                                </Button>
-                                <Button variant="primary" type="submit" onClick={this.showAddPictureModal}>
-                                    Save Changes
-                                </Button>
+                                <Button variant="secondary" onClick={this.closeAddPictureModal}>Close</Button>
+                                <Button variant="success" type="submit" onClick={this.showAddPictureModal}>Save Changes</Button>
                             </Modal.Footer>
                         </Form>
                     </Modal>
+
                     {this.state.stickies.map(
                         (sticky) => <StickyNote id ={sticky.id}
                                                 content={sticky.content}
@@ -179,16 +186,18 @@ export default class App extends React.Component {
                                                 color={sticky.color}
                                                 onChange={this.updateStickyNote}
                                                 onRemove={() => this.removeStickyNote(sticky.id)}
-                                                onEdit={this.setNoteToEdit}
+                                                onEdit={this.setStickyNoteToEditMode}
                                                 onStop={this.updateStickyNoteLocation}/>
                                                 )}
+                    
                     {this.state.pictures.map(
                         (image) => <Picture id={image.id} 
                                             key={image.id} 
                                             picture={image.picture} 
                                             position={image.position}
-                                            onRemove={() => this.removeImage(image.id)}
+                                            onRemove={() => this.removePicture(image.id)}
                                             onStop={this.updatePictureLocation}/>)}
+                    
                     <ReactSketchCanvas  ref={this.canvas}
                                         style={{
                                             height: '100%',
@@ -201,8 +210,7 @@ export default class App extends React.Component {
                                         strokeWidth={4}
                                         eraserWidth={40}
                                         strokeColor="blue"
-                                        />
-                
+                                        />               
             </Container>
         </>
     }
