@@ -13,18 +13,36 @@ import Form from 'react-bootstrap/Form'
 export default class App extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { 
+        this.state = JSON.parse(window.localStorage.getItem('state')) || { 
             stickies: [], 
-            showAddPictureModal: false, 
-            pictures: [] 
+            pictures: [],
+            canvasPaths: [],
+            showAddPictureModal: false
         }
         this.canvas = React.createRef()
     }
 
+    setState(state) {
+        this.saveAllToLocalStorage()
+        super.setState(state)
+    }
+    
+    componentDidMount(){
+        this.canvas.current.loadPaths(this.state.canvasPaths)
+    }
+
+    componentDidUpdate(){
+        this.saveAllToLocalStorage()
+    }
+
+    saveAllToLocalStorage(){
+        window.localStorage.setItem('state', JSON.stringify(this.state))
+    }
+
     getLastStickyNoteId(){
-        var currentId = 0;
+        var currentId = 0
         if (this.state.stickies.length > 0){
-            currentId = this.state.stickies.at(-1).id;
+            currentId = this.state.stickies.at(-1).id
         }
         return currentId
     }
@@ -42,7 +60,7 @@ export default class App extends React.Component {
             position: {x: this.getRandomIntegerBetween(10, 30), y: this.getRandomIntegerBetween(10, 30)},
             color: '#ffc107'
         }
-        notes.push(newNote);
+        notes.push(newNote)
         this.setState({stickies: notes})
     }
 
@@ -61,7 +79,7 @@ export default class App extends React.Component {
     }
 
     setStickyNoteToEditMode = (id) => {
-        let notes = [ ...this.state.stickies ];
+        let notes = [ ...this.state.stickies ]
         let oldNote = notes.find((note) => note.id === id)
         oldNote.editing = true
         this.setState({stickies: notes})
@@ -113,20 +131,18 @@ export default class App extends React.Component {
                 position: {x: this.getRandomIntegerBetween(10, 30), y: this.getRandomIntegerBetween(10, 30)},
             }
             images.push(newImage)
-            this.setState({
-              pictures: images
-            });
-          }
+            this.setState({pictures: images})
+        }
         this.closeAddPictureModal()
         event.preventDefault()
     }
 
     getLastPictureId(){
-        var currentId = 0;
+        var currentId = 0
         if (this.state.pictures.length > 0){
             currentId = this.state.pictures.at(-1).id
         }
-        return currentId;
+        return currentId
     }
 
     updatePictureLocation = (id, x, y) => {
@@ -141,6 +157,10 @@ export default class App extends React.Component {
         this.setState({pictures: images})
     }
 
+    saveCanvasPaths = () => {
+        this.canvas.current.exportPaths()
+            .then(result => this.setState({canvasPaths: result}))
+    }
 
     render() {
         return <>
@@ -210,7 +230,7 @@ export default class App extends React.Component {
                                         strokeWidth={4}
                                         eraserWidth={40}
                                         strokeColor="blue"
-                                        />               
+                                        onChange={this.saveCanvasPaths}/>               
             </Container>
         </>
     }

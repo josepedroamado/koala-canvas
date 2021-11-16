@@ -13,7 +13,7 @@ export default class StickyNote extends React.Component {
 
     update = (event) => {
         this.props.onChange(this.props.id, event.target.noteText.value, event.target.noteColor.value)
-        event.preventDefault();
+        event.preventDefault()
     }
 
     setEditMode = () => {
