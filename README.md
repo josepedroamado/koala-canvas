@@ -18,3 +18,6 @@ This is a small web-app which allows users to arrange sticky notes on a canvas.
 2. Open a command line and navigate to the project folder
 3. Run "npm install"
 4. Run "npm start"
+
+
+Live [demo](https://koala-canvas.herokuapp.com/)
