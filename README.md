@@ -2,6 +2,8 @@
 
 This is a small web-app which allows users to arrange sticky notes on a canvas.
 
+Live [demo](https://koala-canvas.herokuapp.com/)
+
 # Features
 
 * Add, edit and delete sticky notes that can be drag and dropped anywhere on the screen
@@ -14,10 +16,10 @@ This is a small web-app which allows users to arrange sticky notes on a canvas.
 
 # To install this project
 
-1. Clone the project to your device
-2. Open a command line and navigate to the project folder
+This guide assumes you have git, node.js and npm installed.
+
+1. Clone the project to your device by opening a command line and run "git clone https://github.com/pepe16694/koala-canvas.git"
+2. Navigate to the project folder with this command "cd koala-canvas"
 3. Run "npm install"
 4. Run "npm start"
-
-
-Live [demo](https://koala-canvas.herokuapp.com/)
+5. Enjoy the app when the browser opens or at http://localhost:3000
