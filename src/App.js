@@ -181,56 +181,56 @@ export default class App extends React.Component {
                 </Container>
             </Navbar>
             <Container fluid>
-                    <Modal show={this.state.showAddPictureModal} onHide={this.closeAddPictureModal}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Adding Image to Canvas</Modal.Title>
-                        </Modal.Header>
-                        <Form onSubmit={this.addPicture}>
-                            <Modal.Body>
-                                Please browse your device for an image to add to the canvas
-                                <Form.Control type="file" accept ="image/*" name='imageFile'/>
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <Button variant="secondary" onClick={this.closeAddPictureModal}>Close</Button>
-                                <Button variant="success" type="submit" onClick={this.showAddPictureModal}>Save Changes</Button>
-                            </Modal.Footer>
-                        </Form>
-                    </Modal>
+                <Modal show={this.state.showAddPictureModal} onHide={this.closeAddPictureModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Adding Image to Canvas</Modal.Title>
+                    </Modal.Header>
+                    <Form onSubmit={this.addPicture}>
+                        <Modal.Body>
+                            Please browse your device for an image to add to the canvas
+                            <Form.Control type="file" accept ="image/*" name='imageFile'/>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={this.closeAddPictureModal}>Close</Button>
+                            <Button variant="success" type="submit" onClick={this.showAddPictureModal}>Save Changes</Button>
+                        </Modal.Footer>
+                    </Form>
+                </Modal>
 
-                    {this.state.stickies.map(
-                        (sticky) => <StickyNote id ={sticky.id}
-                                                content={sticky.content}
-                                                editing={sticky.editing}
-                                                key={sticky.id} 
-                                                position={sticky.position}
-                                                color={sticky.color}
-                                                onChange={this.updateStickyNote}
-                                                onRemove={() => this.removeStickyNote(sticky.id)}
-                                                onEdit={this.setStickyNoteToEditMode}
-                                                onStop={this.updateStickyNoteLocation}/>
-                                                )}
-                    
-                    {this.state.pictures.map(
-                        (image) => <Picture id={image.id} 
-                                            key={image.id} 
-                                            picture={image.picture} 
-                                            position={image.position}
-                                            onRemove={() => this.removePicture(image.id)}
-                                            onStop={this.updatePictureLocation}/>)}
-                    
-                    <ReactSketchCanvas  ref={this.canvas}
-                                        style={{
-                                            height: '100%',
-                                            width: '100%',
-                                            position: 'absolute',
-                                            left: '0px',
-                                            overflow: 'hidden',
-                                            zIndex: -1
-                                        }}
-                                        strokeWidth={4}
-                                        eraserWidth={40}
-                                        strokeColor="blue"
-                                        onChange={this.saveCanvasPaths}/>               
+                {this.state.stickies.map(
+                    (sticky) => <StickyNote id ={sticky.id}
+                                            content={sticky.content}
+                                            editing={sticky.editing}
+                                            key={sticky.id} 
+                                            position={sticky.position}
+                                            color={sticky.color}
+                                            onChange={this.updateStickyNote}
+                                            onRemove={() => this.removeStickyNote(sticky.id)}
+                                            onEdit={this.setStickyNoteToEditMode}
+                                            onStop={this.updateStickyNoteLocation}/>
+                                            )}
+                
+                {this.state.pictures.map(
+                    (image) => <Picture id={image.id} 
+                                        key={image.id} 
+                                        picture={image.picture} 
+                                        position={image.position}
+                                        onRemove={() => this.removePicture(image.id)}
+                                        onStop={this.updatePictureLocation}/>)}
+                
+                <ReactSketchCanvas  ref={this.canvas}
+                                    style={{
+                                        height: '100%',
+                                        width: '100%',
+                                        position: 'absolute',
+                                        left: '0px',
+                                        overflow: 'hidden',
+                                        zIndex: -1
+                                    }}
+                                    strokeWidth={4}
+                                    eraserWidth={40}
+                                    strokeColor="blue"
+                                    onChange={this.saveCanvasPaths}/>               
             </Container>
         </>
     }

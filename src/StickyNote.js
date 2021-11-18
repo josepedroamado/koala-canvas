@@ -49,7 +49,7 @@ export default class StickyNote extends React.Component {
                                     <Form.Control
                                         type="color"
                                         name="noteColor"
-                                        defaultValue="#ffc107"
+                                        defaultValue= {this.props.color}
                                         className='me-auto'
                                     />
                                     <Button variant="outline-dark" type="submit" className='ms-auto'>

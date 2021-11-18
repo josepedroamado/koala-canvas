@@ -23,3 +23,8 @@ This guide assumes you have git, node.js and npm installed.
 3. Run "npm install"
 4. Run "npm start"
 5. Enjoy the app when the browser opens or at http://localhost:3000
+
+# Known bugs
+
+* Images are not properly saved when closing the tab
+* The page breaks when the window is too small, like on a mobile device. The components get their size reduced compared to the full window size
