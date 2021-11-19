@@ -41,8 +41,9 @@ export default class App extends React.Component {
 
     getLastStickyNoteId(){
         var currentId = 0
-        if (this.state.stickies.length > 0){
-            currentId = this.state.stickies.at(-1).id
+        var stickiesArrayLength = this.state.stickies.length;
+        if (stickiesArrayLength > 0){
+            currentId = this.state.stickies[stickiesArrayLength-1].id
         }
         return currentId
     }
